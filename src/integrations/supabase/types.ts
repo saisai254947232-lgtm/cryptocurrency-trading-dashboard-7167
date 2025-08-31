@@ -14,6 +14,111 @@ export type Database = {
   }
   public: {
     Tables: {
+      coins: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean | null
+          is_custom: boolean | null
+          logo_url: string | null
+          market_cap: number | null
+          name: string
+          price: number | null
+          price_change_24h: number | null
+          symbol: string
+          updated_at: string
+          volume_24h: number | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          is_custom?: boolean | null
+          logo_url?: string | null
+          market_cap?: number | null
+          name: string
+          price?: number | null
+          price_change_24h?: number | null
+          symbol: string
+          updated_at?: string
+          volume_24h?: number | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          is_custom?: boolean | null
+          logo_url?: string | null
+          market_cap?: number | null
+          name?: string
+          price?: number | null
+          price_change_24h?: number | null
+          symbol?: string
+          updated_at?: string
+          volume_24h?: number | null
+        }
+        Relationships: []
+      }
+      orders: {
+        Row: {
+          amount: number
+          base_coin_id: string
+          created_at: string
+          filled_amount: number | null
+          id: string
+          price: number | null
+          quote_coin_id: string
+          side: string
+          status: string | null
+          type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          base_coin_id: string
+          created_at?: string
+          filled_amount?: number | null
+          id?: string
+          price?: number | null
+          quote_coin_id: string
+          side: string
+          status?: string | null
+          type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          base_coin_id?: string
+          created_at?: string
+          filled_amount?: number | null
+          id?: string
+          price?: number | null
+          quote_coin_id?: string
+          side?: string
+          status?: string | null
+          type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_base_coin_id_fkey"
+            columns: ["base_coin_id"]
+            isOneToOne: false
+            referencedRelation: "coins"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_quote_coin_id_fkey"
+            columns: ["quote_coin_id"]
+            isOneToOne: false
+            referencedRelation: "coins"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -49,6 +154,103 @@ export type Database = {
           username?: string | null
         }
         Relationships: []
+      }
+      transactions: {
+        Row: {
+          admin_approved_at: string | null
+          admin_approved_by: string | null
+          amount: number
+          coin_id: string
+          created_at: string
+          fee: number | null
+          id: string
+          price: number | null
+          status: string | null
+          transaction_hash: string | null
+          type: string
+          updated_at: string
+          user_id: string
+          wallet_address: string | null
+        }
+        Insert: {
+          admin_approved_at?: string | null
+          admin_approved_by?: string | null
+          amount: number
+          coin_id: string
+          created_at?: string
+          fee?: number | null
+          id?: string
+          price?: number | null
+          status?: string | null
+          transaction_hash?: string | null
+          type: string
+          updated_at?: string
+          user_id: string
+          wallet_address?: string | null
+        }
+        Update: {
+          admin_approved_at?: string | null
+          admin_approved_by?: string | null
+          amount?: number
+          coin_id?: string
+          created_at?: string
+          fee?: number | null
+          id?: string
+          price?: number | null
+          status?: string | null
+          transaction_hash?: string | null
+          type?: string
+          updated_at?: string
+          user_id?: string
+          wallet_address?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transactions_coin_id_fkey"
+            columns: ["coin_id"]
+            isOneToOne: false
+            referencedRelation: "coins"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_balances: {
+        Row: {
+          balance: number | null
+          coin_id: string
+          created_at: string
+          id: string
+          locked_balance: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          balance?: number | null
+          coin_id: string
+          created_at?: string
+          id?: string
+          locked_balance?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          balance?: number | null
+          coin_id?: string
+          created_at?: string
+          id?: string
+          locked_balance?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_balances_coin_id_fkey"
+            columns: ["coin_id"]
+            isOneToOne: false
+            referencedRelation: "coins"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
