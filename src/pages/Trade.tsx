@@ -6,9 +6,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import CryptoChart from '@/components/CryptoChart';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts";
 
 interface Coin {
   id: string;
@@ -25,6 +25,12 @@ const Trade = () => {
   const [amount, setAmount] = useState('');
   const [price, setPrice] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Mock chart data for trading view
+  const chartData = Array.from({ length: 24 }, (_, i) => ({
+    time: `${i}:00`,
+    price: 43000 + Math.random() * 2000 - 1000,
+  }));
 
   useEffect(() => {
     fetchCoins();
@@ -129,7 +135,38 @@ const Trade = () => {
                 <CardTitle>{selectedPair} Price Chart</CardTitle>
               </CardHeader>
               <CardContent className="h-[520px]">
-                <CryptoChart />
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={chartData}>
+                    <XAxis 
+                      dataKey="time" 
+                      stroke="#475569"
+                      fontSize={12}
+                    />
+                    <YAxis 
+                      stroke="#475569"
+                      fontSize={12}
+                      tickFormatter={(value) => `$${value.toLocaleString()}`}
+                    />
+                    <Tooltip 
+                      contentStyle={{ 
+                        background: '#FFFFFF',
+                        border: '1px solid #E2E8F0',
+                        borderRadius: '8px'
+                      }}
+                      labelStyle={{ color: '#0F172A' }}
+                      itemStyle={{ color: '#6366F1' }}
+                      formatter={(value: number) => [`$${value.toLocaleString()}`, 'Price']}
+                    />
+                    <Line 
+                      type="monotone" 
+                      dataKey="price" 
+                      stroke="#6366F1" 
+                      strokeWidth={2}
+                      dot={false}
+                      activeDot={{ r: 4, fill: '#6366F1' }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
               </CardContent>
             </Card>
           </div>
